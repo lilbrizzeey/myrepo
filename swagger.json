@@ -1,0 +1,1891 @@
+{
+   "swagger": "2.0",
+   "info": {
+      "version": "1.0.0",
+      "title": "Hotels.ng API",
+      "description": "Welcome to the Hotels.ng API! You can use our API to integrate within you applications.<h1>NOTE</H1><br> <br>All throughout this documentation every method has a &#34;Switch to Console or Switch to Example Option&#34;. This functionality will let your paste your Access Token (and other pertinent parameters) and make a live request to the API.",
+      "termsOfService": "http://hotels.ng/terms/",
+      "contact": {
+         "name": "Neo igh",
+         "email": "neo@hng.tech.ng",
+         "url": "www.neo.com"
+      },
+      "license": {
+         "name": "Apache 2.0",
+         "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+      }
+   },
+   "host": "staging.api.hng.tech",
+   "tags": [
+      {
+         "name": "Bookings",
+         "description": "Access to all bookings related things"
+      },
+      {
+         "name": "Authentication",
+         "description": "This Endpoint provides you with access Token"
+      },
+      {
+         "name": "user",
+         "description": "Operations about user"
+      },
+      {
+         "name": "Ratings",
+         "description": "Access to all Rates Flag - List of Scopes to be used in Authorization <br>rates.read,<br> rates.create,<br>rates.delete <br> rates.update"
+      },
+      {
+         "name": "Rooms",
+         "description": "Access to all Rooms related things"
+      },
+      {
+         "name": "Hotels",
+         "description": "Access to all Hotel related things - List of Scopes to be used in Authorization <br>properties.read,<br> properties.create,<br>properties.delete <br> properties.update"
+      },
+      {
+         "name": "Location",
+         "description": "Access to all Location Related Things"
+      },
+      {
+         "name": "Search",
+         "description": "Search for Hotels with parameters"
+      },
+      {
+         "name": "Finance",
+         "description": "Access to all finance related things"
+      }
+   ],
+   "schemes": [
+      "http"
+   ],
+   "produces": [
+      "application/json"
+   ],
+   "paths": {
+      "/oauth/authenticate": {
+         "get": {
+            "tags": [
+               "Authentication"
+            ],
+            "description": "Hotels.ng uses Client id and Client Secret to allow access to the api.The client id and secret would provide an access token which would now grant you access to all our Hotels.ng endpoints.\n<br> For the Hng Internship,<br>The default Client_id is <b>wLV9nF9J8uo0SuaYXl7wCc9RV</b><br>The default Client_secret is <b>YBiqbzOpma9zSUd3txXSCKQvcdZuPDcrS0AVGp9v</b> <br>The default grantType is <b>client_credentials</b> <br> For a list of scopes, see the descriptions for the endpoint you are consuming for available scopes.<b> It is advised to use only scope for the endpoint you are consuming<br> Multiple scopes can be combined with ',' as a delimeter.\n",
+            "operationId": "authenticate",
+            "parameters": [
+               {
+                  "name": "grant_type",
+                  "in": "query",
+                  "description": "level of access the api supports",
+                  "required": true,
+                  "type": "string"
+               },
+               {
+                  "name": "client_id",
+                  "in": "query",
+                  "description": "the id of the user requesting the api",
+                  "required": true,
+                  "type": "string"
+               },
+               {
+                  "name": "client_secret",
+                  "in": "query",
+                  "description": "Your secret key",
+                  "required": true,
+                  "type": "string"
+               },
+               {
+                  "name": "scope",
+                  "in": "query",
+                  "description": "Endpoint trying to Consume",
+                  "type": "string",
+                  "required": true
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "successful Generation",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/Token"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "unexpected error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      },
+      "/search": {
+         "get": {
+            "tags": [
+               "Search"
+            ],
+            "description": "This enpoint allows you to search For Hotels",
+            "operationId": "Search",
+            "parameters": [
+               {
+                  "name": "query",
+                  "in": "query",
+                  "type": "string",
+                  "required": true
+               },
+               {
+                  "name": "access_token",
+                  "in": "query",
+                  "type": "string",
+                  "required": true
+               },
+               {
+                  "name": "with_images",
+                  "in": "query",
+                  "type": "string",
+                  "required": false
+               },
+               {
+                  "name": "with_rates",
+                  "in": "query",
+                  "type": "string",
+                  "required": false
+               },
+               {
+                  "name": "filters",
+                  "in": "query",
+                  "type": "string",
+                  "required": false
+               },
+               {
+                  "name": "search_type",
+                  "in": "query",
+                  "type": "string",
+                  "required": true
+               },
+               {
+                  "name": "property_type",
+                  "in": "query",
+                  "type": "string",
+                  "required": false
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Search SuccessFul",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/Flags"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "unexpected error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      },
+      "/bookings": {
+         "get": {
+            "tags": [
+               "Bookings"
+            ],
+            "description": "This endpoint Fetches all Bookings, booking by email",
+            "operationId": "bookings details",
+            "parameters": [
+               {
+                  "name": "email",
+                  "in": "query",
+                  "description": "Email of User",
+                  "required": false,
+                  "type": "integer"
+               },
+               {
+                  "name": "access_token",
+                  "in": "query",
+                  "description": "Your Access Token",
+                  "required": true,
+                  "type": "string"
+               },
+               {
+                  "name": "per_page",
+                  "in": "query",
+                  "description": "number of results per page",
+                  "required": false,
+                  "type": "integer",
+                  "format": "int64"
+               },
+               {
+                  "name": "booking_id",
+                  "in": "query",
+                  "description": "Id of the particular booking",
+                  "required": false,
+                  "type": "string"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Hotel Booking Details By Email response",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/BookingEmailDetails"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "UnExpected Error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      },
+      "/bookings/{booking_id}": {
+         "get": {
+            "tags": [
+               "Bookings"
+            ],
+            "description": "This endpoint shows the booking details of a specific booking.",
+            "operationId": "bookings details",
+            "parameters": [
+               {
+                  "name": "booking_id",
+                  "in": "path",
+                  "description": "booking id",
+                  "required": true,
+                  "type": "integer"
+               },
+               {
+                  "name": "access_token",
+                  "in": "query",
+                  "description": "Your Access Token",
+                  "required": true,
+                  "type": "string"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Hotel Booking Details response",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/BookingDetails"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "UnExpected Error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      },
+      "/bookings/create?{hotel_id}": {
+         "post": {
+            "tags": [
+               "Bookings"
+            ],
+            "description": "This endpoint creates a new booking for a specific hotel.",
+            "operationId": "Booking of hotel",
+            "parameters": [
+               {
+                  "name": "hotel_id",
+                  "in": "path",
+                  "description": "id of the Hotel",
+                  "required": true,
+                  "type": "integer"
+               },
+               {
+                  "name": "access_token",
+                  "in": "query",
+                  "description": "Your Access Token",
+                  "required": true,
+                  "type": "string"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Hotel Booking response",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/HotelCreateBooking"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "UnExpected Error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      },
+      "/hotels": {
+         "get": {
+            "tags": [
+               "Hotels"
+            ],
+            "description": "This endpoint returns an array of Hotels",
+            "operationId": "Hotels list",
+            "parameters": [
+               {
+                  "name": "access_token",
+                  "in": "query",
+                  "description": "Your Access Token",
+                  "required": true,
+                  "type": "string"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Hotels List response",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/SingleRate"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "UnExpected Error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      },
+      "/hotels/{hotel_id}/images": {
+         "get": {
+            "tags": [
+               "Images"
+            ],
+            "description": "This endpoint fetches images for a specific hotel.",
+            "operationId": "Images of hotel",
+            "parameters": [
+               {
+                  "name": "hotel_id",
+                  "in": "path",
+                  "description": "id of the Hotel",
+                  "required": true,
+                  "type": "integer"
+               },
+               {
+                  "name": "access_token",
+                  "in": "query",
+                  "description": "Your Access Token",
+                  "required": true,
+                  "type": "string"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Hotel Images response",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/HotelImages"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "UnExpected Error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      },
+      "/hotels/{hotel_id}": {
+         "get": {
+            "tags": [
+               "Hotels"
+            ],
+            "description": "This endpoint shows details of a particular hotel",
+            "operationId": "Hotel detail by id",
+            "parameters": [
+               {
+                  "name": "hotel_id",
+                  "in": "path",
+                  "description": "the id of the hotel",
+                  "required": true,
+                  "type": "string"
+               },
+               {
+                  "name": "access_token",
+                  "in": "query",
+                  "description": "Your Access Token",
+                  "required": true,
+                  "type": "string"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Single Hotel response",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/SingleRate"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "UnExpected Error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      },
+      "/hotels/{hotel_id}/details": {
+         "get": {
+            "tags": [
+               "Hotels"
+            ],
+            "description": "This endpoint Gets details of a hotel and everything associated to it",
+            "operationId": "Hotel details by id",
+            "parameters": [
+               {
+                  "name": "hotel_id",
+                  "in": "path",
+                  "description": "the id of the hotel",
+                  "required": true,
+                  "type": "string"
+               },
+               {
+                  "name": "access_token",
+                  "in": "query",
+                  "description": "Your Access Token",
+                  "required": true,
+                  "type": "string"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Hotel Detail response",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/SingleRate"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "UnExpected Error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      },
+      "/hotels/{hotel_id}/facilities": {
+         "get": {
+            "tags": [
+               "Facilities"
+            ],
+            "description": "This endpoint shows the facilities available for a specific hotel.",
+            "operationId": "Facilities of hotel",
+            "parameters": [
+               {
+                  "name": "hotel_id",
+                  "in": "path",
+                  "description": "id of the Hotel",
+                  "required": true,
+                  "type": "integer"
+               },
+               {
+                  "name": "access_token",
+                  "in": "query",
+                  "description": "Your Access Token",
+                  "required": true,
+                  "type": "string"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Hotel Facilities Details response",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/HotelFacilitiesDetails"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "UnExpected Error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      },
+      "/hotels/reviews/add?{hotel_id}": {
+         "post": {
+            "tags": [
+               "Reviews"
+            ],
+            "description": "This endpoint adds a review for a specific hotel.",
+            "operationId": "Review of hotel",
+            "parameters": [
+               {
+                  "name": "hotel_id",
+                  "in": "path",
+                  "description": "id of the Hotel",
+                  "required": true,
+                  "type": "integer"
+               },
+               {
+                  "name": "access_token",
+                  "in": "query",
+                  "description": "Your Access Token",
+                  "required": true,
+                  "type": "string"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Hotel Review response",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/HotelAddReview"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "UnExpected Error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      },
+      "/hotels/{hotel_id}/reviews": {
+         "get": {
+            "tags": [
+               "Reviews"
+            ],
+            "description": "This endpoint shows the reviews for a specific hotel.",
+            "operationId": "Reviews of hotel",
+            "parameters": [
+               {
+                  "name": "hotel_id",
+                  "in": "path",
+                  "description": "id of the Hotel",
+                  "required": true,
+                  "type": "integer"
+               },
+               {
+                  "name": "access_token",
+                  "in": "query",
+                  "description": "Your Access Token",
+                  "required": true,
+                  "type": "string"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Hotel Reviews response",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/HotelReviews"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "UnExpected Error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      },
+      "/hng/bank_details/{hotel_id}": {
+         "get": {
+            "tags": [
+               "Facilities"
+            ],
+            "description": "This endpoint shows the banks details of a specific hotel.",
+            "operationId": "Bank details of hotel",
+            "parameters": [
+               {
+                  "name": "hotel_id",
+                  "in": "path",
+                  "description": "id of the Hotel",
+                  "required": true,
+                  "type": "integer"
+               },
+               {
+                  "name": "access_token",
+                  "in": "query",
+                  "description": "Your Access Token",
+                  "required": true,
+                  "type": "string"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Hotel Bank Details response",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/HotelBankDetails"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "UnExpected Error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      },
+      "/location/countries": {
+         "get": {
+            "tags": [
+               "Location"
+            ],
+            "description": "This endpoint shows the list of countries.",
+            "operationId": "list of countries",
+            "parameters": [
+               {
+                  "name": "countries",
+                  "in": "query",
+                  "description": "Countries list",
+                  "required": true,
+                  "type": "string"
+               },
+               {
+                  "name": "access_token",
+                  "in": "query",
+                  "description": "Your Access Token",
+                  "required": true,
+                  "type": "string"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Countries list  response",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/SingleRate"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "UnExpected Error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      },
+      "/location/propertylocations/property_id/property": {
+         "get": {
+            "tags": [
+               "Location"
+            ],
+            "description": "This endpoint shows the list of properties in a location.",
+            "operationId": "list of Properties",
+            "parameters": [
+               {
+                  "name": "PropertyList",
+                  "in": "query",
+                  "description": "Properties List",
+                  "required": true,
+                  "type": "string"
+               },
+               {
+                  "name": "access_token",
+                  "in": "query",
+                  "description": "Your Access Token",
+                  "required": true,
+                  "type": "string"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Properties list  response",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/SingleRate"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "UnExpected Error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      },
+      "/rooms/property/{hotel_id}": {
+         "get": {
+            "tags": [
+               "Rooms"
+            ],
+            "description": "This endpoint returns rooms for a particular hotel based on hotel id",
+            "operationId": "Room detail by id",
+            "parameters": [
+               {
+                  "name": "hotel_id",
+                  "in": "path",
+                  "description": "the id of the hotel",
+                  "required": true,
+                  "type": "string"
+               },
+               {
+                  "name": "access_token",
+                  "in": "query",
+                  "description": "Your Access Token",
+                  "required": true,
+                  "type": "string"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Rooms In A Hotel response",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/SingleRate"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "UnExpected Error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      },
+      "/rates/{rate_id}/detail": {
+         "get": {
+            "tags": [
+               "Ratings"
+            ],
+            "description": "This Endpoint returns the detail about a single rate by id",
+            "operationId": "Ratings by Id",
+            "parameters": [
+               {
+                  "name": "rate_id",
+                  "in": "path",
+                  "description": "Id of the rate detail to fetch",
+                  "required": true,
+                  "type": "integer",
+                  "format": "int64"
+               },
+               {
+                  "name": "access_token",
+                  "in": "query",
+                  "description": "Your Access Token",
+                  "required": true,
+                  "type": "string"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Single detail response",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/SingleRate"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "UnExpected Error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      },
+      "/rates/flags/all": {
+         "get": {
+            "tags": [
+               "Ratings"
+            ],
+            "description": "This EndPoint returns all the available Flags",
+            "operationId": "Ratings",
+            "parameters": [
+               {
+                  "name": "access_token",
+                  "in": "query",
+                  "description": "Your Access Token",
+                  "required": true,
+                  "type": "string"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "successful Generation",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/Flags"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "unexpected error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      },
+      "/rates/flags/add?flag_names=test": {
+         "post": {
+            "tags": [
+               "Ratings"
+            ],
+            "description": "This endpoint adds a flags names to rates.",
+            "operationId": "flag names",
+            "parameters": [
+               {
+                  "name": "flag_names",
+                  "in": "query",
+                  "description": "Flag names",
+                  "required": true,
+                  "type": "string"
+               },
+               {
+                  "name": "access_token",
+                  "in": "query",
+                  "description": "Your Access Token",
+                  "required": true,
+                  "type": "string"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Flag name success response",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/addFlagnames"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "UnExpected Error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      },
+      "/rates/flags/multiple/fetch": {
+         "get": {
+            "tags": [
+               "Ratings"
+            ],
+            "description": "This endpoint returns mutiple rate flags by id",
+            "operationId": "Rate Flags By Id",
+            "parameters": [
+               {
+                  "name": "rate_ids",
+                  "in": "query",
+                  "description": "the rate_id of the flag",
+                  "required": true,
+                  "type": "string"
+               },
+               {
+                  "name": "access_token",
+                  "in": "query",
+                  "description": "Your Access Token",
+                  "required": true,
+                  "type": "string"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Single detail response",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/SingleRate"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "UnExpected Error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      },
+      "/rates2/properties": {
+         "get": {
+            "tags": [
+               "Ratings"
+            ],
+            "description": "This endpoint returns company rates",
+            "operationId": "Company Rate",
+            "parameters": [
+               {
+                  "name": "company_rates",
+                  "in": "query",
+                  "description": "The rate of the company",
+                  "required": true,
+                  "type": "string"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Rates properties response",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/SingleRate"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "UnExpected Error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      },
+      "/reports/bookings/reviewed": {
+         "get": {
+            "tags": [
+               "Reports"
+            ],
+            "description": "This endpoint return bookings that have been reviewed.",
+            "operationId": "reviewed bookings",
+            "parameters": [
+               {
+                  "name": "access_token",
+                  "in": "query",
+                  "description": "Your Access Token",
+                  "required": true,
+                  "type": "string"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Bookings Review Response",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/BookingReview"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "UnExpected Error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      },
+      "/reports/bookings/count": {
+         "get": {
+            "tags": [
+               "Reports"
+            ],
+            "description": "This endpoint counts number of bookings",
+            "operationId": "Bookings count",
+            "parameters": [
+               {
+                  "name": "access_token",
+                  "in": "query",
+                  "description": "Your Access Token",
+                  "required": true,
+                  "type": "string"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Bookings Count response",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/SingleRate"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "UnExpected Error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      },
+      "/reports/bookings": {
+         "get": {
+            "tags": [
+               "Reports"
+            ],
+            "description": "This endpoint fetches bookings by ID and the total count",
+            "operationId": "Bookings list",
+            "parameters": [
+               {
+                  "name": "access_token",
+                  "in": "query",
+                  "description": "Your Access Token",
+                  "required": true,
+                  "type": "string"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Bookings List response",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/SingleRate"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "UnExpected Error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      },
+      "/reports/bookings/utms/gclid": {
+         "get": {
+            "tags": [
+               "Reports"
+            ],
+            "description": "This endpoint returns the range of days in a calendar month in which bookings can be made",
+            "operationId": "report",
+            "parameters": [
+               {
+                  "name": "access_token",
+                  "in": "query",
+                  "description": "Access Token",
+                  "type": "string",
+                  "required": true
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "successful",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/Token"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "unexpected error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      },
+      "/auth/hms/users": {
+         "get": {
+            "tags": [
+               "Users"
+            ],
+            "description": "This endpoint shows the list of users.",
+            "operationId": "list of users",
+            "parameters": [
+               {
+                  "name": "access_token",
+                  "in": "query",
+                  "description": "Your Access Token",
+                  "required": true,
+                  "type": "string"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Hotel Booking Details response",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/HmsUser"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "UnExpected Error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      },
+      "/auth/users/authenticate": {
+         "post": {
+            "tags": [
+               "Users"
+            ],
+            "description": "This endpoint helps in validating the users.",
+            "operationId": "authenticate user",
+            "parameters": [
+               {
+                  "name": "access_token",
+                  "in": "query",
+                  "description": "Your Access Token",
+                  "required": true,
+                  "type": "string"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "successful",
+                  "schema": {
+                     "type": "array",
+                     "items": {
+                        "$ref": "#/definitions/UsersAuthenticate"
+                     }
+                  }
+               },
+               "default": {
+                  "description": "UnExpected Error",
+                  "schema": {
+                     "$ref": "#/definitions/Error"
+                  }
+               }
+            }
+         }
+      }
+   },
+   "definitions": {
+      "Bookings": {
+         "type": "object",
+         "properties": {
+            "booking_id": {
+               "type": "integer",
+               "format": "int64",
+               "example": 1234
+            },
+            "user_id": {
+               "type": "integer",
+               "format": "int64",
+               "example": 12341234
+            },
+            "amg_id": {
+               "type": "integer",
+               "format": "int64",
+               "example": 1234
+            },
+            "company_id": {
+               "type": "integer",
+               "format": "int64",
+               "example": 1234
+            },
+            "hotel_setted": {
+               "type": "boolean",
+               "example": "yes"
+            },
+            "company_settled": {
+               "type": "boolean",
+               "example": "yes"
+            },
+            "is_invoiced": {
+               "type": "boolean",
+               "example": "yes"
+            },
+            "is_processed": {
+               "type": "boolean",
+               "example": "yes"
+            },
+            "guest_stayed": {
+               "type": "boolean",
+               "example": "yes"
+            },
+            "bils": {
+               "type": "string",
+               "example": "test"
+            },
+            "vat": {
+               "type": "boolean",
+               "example": "yes"
+            }
+         }
+      },
+      "Token": {
+         "required": [
+            "access_token",
+            "token_type",
+            "expires_in"
+         ],
+         "properties": {
+            "access_token": {
+               "type": "string"
+            },
+            "token_type": {
+               "type": "string"
+            },
+            "expires_in": {
+               "type": "integer",
+               "format": "int32",
+               "minimum": 0
+            }
+         },
+         "default": {
+            "access_token": "LdRcatkZa2vX8RjRdIf96WrUvnUN0w0QHE2WfOrp",
+            "token_type": "Bearer",
+            "expires_in": 3600
+         }
+      },
+      "Flags": {
+         "required": [
+            "status",
+            "message",
+            "data"
+         ],
+         "properties": {
+            "status": {
+               "type": "string"
+            },
+            "message": {
+               "type": "string"
+            },
+            "data": {
+               "type": "array",
+               "items": {
+                  "type": "array",
+                  "items": {
+                     "type": "string",
+                     "xml": {
+                        "name": "test"
+                     }
+                  }
+               }
+            }
+         },
+         "default": {
+            "status": "success",
+            "message": "Available Flags",
+            "data": {
+               "flag_name": "BreakFast Inclusive",
+               "id": 1
+            }
+         }
+      },
+      "SingleRate": {
+         "required": [
+            "status",
+            "message",
+            "data"
+         ],
+         "properties": {
+            "status": {
+               "type": "string"
+            },
+            "message": {
+               "type": "string"
+            },
+            "data": {
+               "type": "array",
+               "items": {
+                  "type": "string",
+                  "xml": {
+                     "name": "Andy"
+                  }
+               }
+            }
+         },
+         "default": {
+            "status": "success",
+            "message": "Rate",
+            "data": {
+               "id": 1,
+               "property_id": 98319,
+               "room_id": 10,
+               "rate_name": null,
+               "rate_tag_id": 1,
+               "rack_price": 55000,
+               "buying_price": 49500,
+               "buying_price_usd\"": null,
+               "selling_price": 55000,
+               "selling_price_usd\"": null,
+               "priority": 1,
+               "start_date": "2000-01-01T00:01:01.000Z",
+               "end_date": "2025-01-01T00:01:01.000Z",
+               "active_start": "2000-01-01T00:01:01.000Z",
+               "active_end": "2025-01-01T00:01:01.000Z",
+               "active_mon": 1,
+               "active_tue": 1,
+               "active_wed": 1,
+               "active_thu": 1,
+               "active_fri": 1,
+               "active_sat": 1,
+               "ctive_sun": 1
+            }
+         }
+      },
+      "HotelFacilitiesDetails": {
+         "required": [
+            "status",
+            "message",
+            "data"
+         ],
+         "properties": {
+            "status": {
+               "type": "string"
+            },
+            "message": {
+               "type": "string"
+            },
+            "data": {
+               "type": "array",
+               "items": {
+                  "type": "string",
+                  "xml": {
+                     "name": "lateef"
+                  }
+               }
+            }
+         },
+         "default": {
+            "status": "success",
+            "message": "Object facilities",
+            "data": {
+               "id": 1967,
+               "object_id": 25449,
+               "facility_type_id": 100,
+               "facility_type_count": null,
+               "object_type": "hotel",
+               "created_at": "2017-01-22T19:54:01.000Z",
+               "updated_at": null,
+               "facility_name": "Restaurant",
+               "img_url": "restaurant.png"
+            }
+         }
+      },
+      "HotelReviews": {
+         "required": [
+            "status",
+            "data"
+         ],
+         "properties": {
+            "status": {
+               "type": "string"
+            },
+            "data": {
+               "type": "array",
+               "items": {
+                  "type": "string",
+                  "xml": {
+                     "name": "lateef"
+                  }
+               }
+            }
+         },
+         "default": {
+            "status": "success",
+            "data": {
+               "id": 3555,
+               "booking_id": "null,",
+               "property_id": 43864,
+               "user_id": "null,",
+               "name": "bimbo,",
+               "email": "null,",
+               "title": "okay,",
+               "location_id": "null,",
+               "comment": "I enjoyed my stay, the service was very good and the rooms were quite comfortable. There was no such thing as being unsatisfied. The staffs were prompt with all the services,",
+               "overall_rating": "2.00,",
+               "is_published": 1,
+               "created_at": "2014-12-02T04:08:38.000Z",
+               "updated_at": "2016-04-07T11:24:16.000Z",
+               "deleted_at": "null,",
+               "published_at": "2014-12-02T04:08:38.000Z",
+               "review_score": {
+                  "id": 3236,
+                  "review_id": 3555,
+                  "criterion_id": 1,
+                  "score": 2,
+                  "created_at": "null,",
+                  "updated_at": "null,",
+                  "deleted_at": null
+               }
+            }
+         }
+      },
+      "HotelImages": {
+         "required": [
+            "status",
+            "data"
+         ],
+         "properties": {
+            "status": {
+               "type": "string"
+            },
+            "data": {
+               "type": "array",
+               "items": {
+                  "type": "string",
+                  "xml": {
+                     "name": "lateef"
+                  }
+               }
+            }
+         },
+         "default": {
+            "data": {
+               "id": 9191,
+               "application_id": 1,
+               "object_id": 25449,
+               "title": "null,",
+               "description": "null,",
+               "url": "https:\\/\\/media.api.hng.tech\\/img\\/big\\/lekki-oxford-hotels-ltd-lagos-8297.jpg,",
+               "room_id": "null,",
+               "facility_id": "null,",
+               "priority": "0,",
+               "created_at": "2017-03-07T13:56:12.000Z",
+               "updated_at": "2017-03-07T13:56:12.000Z"
+            },
+            "status": "success"
+         }
+      },
+      "HotelAddReview": {
+         "required": [
+            "status",
+            "data"
+         ],
+         "properties": {
+            "status": {
+               "type": "string"
+            },
+            "data": {
+               "type": "array",
+               "items": {
+                  "type": "string",
+                  "xml": {
+                     "name": "lateef"
+                  }
+               }
+            }
+         },
+         "default": {
+            "status": "success",
+            "data": []
+         }
+      },
+      "Rooms": {
+         "required": [
+            "status",
+            "message",
+            "data"
+         ],
+         "properties": {
+            "status": {
+               "type": "string"
+            },
+            "message": {
+               "type": "string"
+            },
+            "data": {
+               "type": "array",
+               "items": {
+                  "type": "string",
+                  "xml": {
+                     "name": "Andy"
+                  }
+               }
+            }
+         },
+         "default": {
+            "status": "success",
+            "data": {
+               "room_id": 2110,
+               "name": "Classic Single Room",
+               "property_id": 43864,
+               "description": null,
+               "number_of_guests": null,
+               "minimum_stay_nights": null,
+               "payment_type": "all",
+               "number_of_rooms": null
+            }
+         }
+      },
+      "HotelBankDetails": {
+         "required": [
+            "status",
+            "message",
+            "data"
+         ],
+         "properties": {
+            "status": {
+               "type": "string"
+            },
+            "message": {
+               "type": "string"
+            },
+            "data": {
+               "type": "array",
+               "items": {
+                  "type": "string",
+                  "xml": {
+                     "name": "Andy"
+                  }
+               }
+            }
+         },
+         "default": {
+            "status": "success",
+            "data": {
+               "id": 406,
+               "property_id": 49583,
+               "account_name": "Avalon Intercontinental nigeria LTD",
+               "account_number": 962308,
+               "bank_name": "FCMB",
+               "sort_code": null
+            }
+         }
+      },
+      "HotelCreateBooking": {
+         "required": [
+            "status",
+            "data"
+         ],
+         "properties": {
+            "status": {
+               "type": "string"
+            },
+            "data": {
+               "type": "array",
+               "items": {
+                  "type": "string",
+                  "xml": {
+                     "name": "lateef"
+                  }
+               }
+            }
+         },
+         "default": {
+            "data": null,
+            "status": "success"
+         }
+      },
+      "BookingDetails": {
+         "required": [
+            "status",
+            "message",
+            "data"
+         ],
+         "properties": {
+            "status": {
+               "type": "string"
+            },
+            "message": {
+               "type": "string"
+            },
+            "data": {
+               "type": "array",
+               "items": {
+                  "type": "string",
+                  "xml": {
+                     "name": "Andy"
+                  }
+               }
+            }
+         },
+         "default": {
+            "status": "success",
+            "data": null
+         }
+      },
+      "BookingEmailDetails": {
+         "required": [
+            "status",
+            "message",
+            "data"
+         ],
+         "properties": {
+            "status": {
+               "type": "string"
+            },
+            "message": {
+               "type": "string"
+            },
+            "data": {
+               "type": "array",
+               "items": {
+                  "type": "string",
+                  "xml": {
+                     "name": "Andy"
+                  }
+               }
+            }
+         },
+         "default": {
+            "status": "success",
+            "data": {
+               "total": 0,
+               "bookings": null
+            }
+         }
+      },
+      "addFlagnames": {
+         "required": [
+            "status",
+            "message",
+            "data"
+         ],
+         "properties": {
+            "status": {
+               "type": "string"
+            },
+            "message": {
+               "type": "string"
+            },
+            "data": {
+               "type": "array",
+               "items": {
+                  "type": "string",
+                  "xml": {
+                     "name": "Andy"
+                  }
+               }
+            }
+         },
+         "default": {
+            "status": "success",
+            "message": "All flags with rate add",
+            "data": [
+               []
+            ]
+         }
+      },
+      "BookingReview": {
+         "required": [
+            "status",
+            "message",
+            "data"
+         ],
+         "properties": {
+            "status": {
+               "type": "string"
+            },
+            "message": {
+               "type": "string"
+            },
+            "data": {
+               "type": "array",
+               "items": {
+                  "type": "string",
+                  "xml": {
+                     "name": "Andy"
+                  }
+               }
+            }
+         },
+         "default": {
+            "status": "success",
+            "data": {
+               "ret_type": "compound",
+               "total": 0,
+               "total_outstanding": 0,
+               "total_completed": 0,
+               "bookings": [],
+               "checkout_from": null,
+               "checkout_to": null,
+               "checkin_from\"": null,
+               "checkin_to": null
+            }
+         }
+      },
+      "HmsUser": {
+         "required": [
+            "status",
+            "message",
+            "data"
+         ],
+         "properties": {
+            "status": {
+               "type": "string"
+            },
+            "message": {
+               "type": "string"
+            },
+            "data": {
+               "type": "array",
+               "items": {
+                  "type": "string",
+                  "xml": {
+                     "name": "Andy"
+                  }
+               }
+            }
+         },
+         "default": {
+            "status": "success",
+            "data": {
+               "id": 1,
+               "name": "Administrator",
+               "email": "management@hotels.ng",
+               "phone": null,
+               "picture": "http:\\/\\/url-to-images\\/",
+               "hms": {
+                  "user_id": 1,
+                  "permission_id": 2,
+                  "custom_rights": [],
+                  "uuid": "ecf4c217-b203-47c6-aca5-dd92c1851e63",
+                  "app_id": 1,
+                  "role_id": 2,
+                  "can_create": 1,
+                  "can_read": 1,
+                  "can_update": 1,
+                  "can_delete": 1,
+                  "name": "admin",
+                  "use_otp": 1,
+                  "permission": {
+                     "can_create": true,
+                     "can_read": true,
+                     "can_update": true,
+                     "can_delete": true,
+                     "app": {
+                        "name": "HMS",
+                        "use_otp": 0,
+                        "role": {
+                           "id": 2,
+                           "uuid": "ecf4c217-b203-47c6-aca5-dd92c1851e63",
+                           "name": "admin",
+                           "use_otp": 1
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      },
+      "UsersAuthenticate": {
+         "required": [
+            "status",
+            "message",
+            "data"
+         ],
+         "properties": {
+            "status": {
+               "type": "string"
+            },
+            "message": {
+               "type": "string"
+            },
+            "data": {
+               "type": "array",
+               "items": {
+                  "type": "string",
+                  "xml": {
+                     "name": "Stanley"
+                  }
+               }
+            }
+         },
+         "default": {
+            "status": "success",
+            "data": null,
+            "id": 58574,
+            "name": "Joy Okpe",
+            "email": "test@hotels.ng",
+            "phone": null,
+            "role": "admin",
+            "picture": "http://url-to-images/"
+         }
+      },
+      "Search": {
+         "required": [
+            "status",
+            "message",
+            "data",
+            "meta"
+         ],
+         "properties": {
+            "status": {
+               "type": "string"
+            },
+            "message": {
+               "type": "string"
+            },
+            "data": {
+               "type": "array",
+               "items": {
+                  "type": "string",
+                  "xml": {
+                     "name": "Andy"
+                  }
+               }
+            },
+            "meta": {
+               "type": "array",
+               "items": {
+                  "type": "string",
+                  "xml": {
+                     "name": "Andy"
+                  }
+               }
+            }
+         },
+         "default": {
+            "status": "Success",
+            "message": null,
+            "data": null,
+            "meta": null
+         }
+      },
+      "Error": {
+         "required": [
+            "error",
+            "trace",
+            "code"
+         ],
+         "properties": {
+            "error": {
+               "type": "string"
+            },
+            "trace": {
+               "type": "string"
+            },
+            "code": {
+               "type": "integer",
+               "format": "int32",
+               "minimum": 0
+            }
+         }
+      }
+   }
+}
